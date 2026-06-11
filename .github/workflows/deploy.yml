@@ -1,4 +1,4 @@
-name: Python Demo
+name: Multi Language Build
 
 on:
   push:
@@ -6,15 +6,31 @@ on:
       - main
 
 jobs:
-
   build:
 
     runs-on: ubuntu-latest
 
     steps:
 
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Run Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-        run: python numbers.py
+      - name: Run Python Program
+        run: python python/numbers.py
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: Compile Java Program
+        run: javac java/Numbers.java
+
+      - name: Run Java Program
+        run: java -cp java Numbers
